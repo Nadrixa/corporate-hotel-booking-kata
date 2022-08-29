@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelKata", "HotelKata\HotelKata.csproj", "{8677B603-9E37-4499-ACF3-E5692F7E1B88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelKataTest", "HotelKataTest\HotelKataTest.csproj", "{ABF35D08-D352-4C0D-A958-8E2973A3C2D3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8677B603-9E37-4499-ACF3-E5692F7E1B88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8677B603-9E37-4499-ACF3-E5692F7E1B88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8677B603-9E37-4499-ACF3-E5692F7E1B88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8677B603-9E37-4499-ACF3-E5692F7E1B88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABF35D08-D352-4C0D-A958-8E2973A3C2D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABF35D08-D352-4C0D-A958-8E2973A3C2D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABF35D08-D352-4C0D-A958-8E2973A3C2D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABF35D08-D352-4C0D-A958-8E2973A3C2D3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
