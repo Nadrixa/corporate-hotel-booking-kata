@@ -19,4 +19,9 @@ public class InMemoryEmployeesRepository : EmployeesRepository
         }
         Employees.Add(employeeId, companyId);
     }
+
+    public string retrieveEmployeeInformation(string employeeId)
+    {
+        return !Employees.ContainsKey(employeeId) ? "" : Employees[employeeId];
+    }
 }

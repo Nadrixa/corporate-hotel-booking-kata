@@ -1,3 +1,4 @@
+using HotelKata.Employees.infrastructure;
 using HotelKata.Hotel.domain;
 using HotelKata.Policies.application;
 using HotelKata.Policies.domain;
@@ -12,9 +13,11 @@ public class Policies : ControllerBase
 {
     private readonly AddCompanyPolicyUseCase _addCompanyPolicyUseCase;
     private readonly AddEmployeePolicyUseCase _addEmployeePolicyUseCase;
+    private readonly CheckIsAllowedUseCase _checkIsAllowedUseCase;
 
-    public Policies(InMemoryPoliciesRepository inMemoryPoliciesRepository)
+    public Policies(InMemoryPoliciesRepository inMemoryPoliciesRepository, InMemoryEmployeesRepository inMemoryEmployeesRepository)
     {
+        _checkIsAllowedUseCase = new CheckIsAllowedUseCase(inMemoryPoliciesRepository, inMemoryEmployeesRepository);
         _addEmployeePolicyUseCase = new AddEmployeePolicyUseCase(inMemoryPoliciesRepository);
         _addCompanyPolicyUseCase = new AddCompanyPolicyUseCase(inMemoryPoliciesRepository);
     }
@@ -27,12 +30,20 @@ public class Policies : ControllerBase
     }
     
     [HttpPost("employee")]
-    public IActionResult AddCompanyPolicy(EmployeePolicyBody companyPolicyBody)
+    public IActionResult AddEmployeePolicy(EmployeePolicyBody companyPolicyBody)
     {
         _addEmployeePolicyUseCase.execute(companyPolicyBody.employeeId, companyPolicyBody.roomTypes);
         return StatusCode(201);
     }
+    
+    [HttpGet("isAllowed/{employeeId}/rooms/{roomType}")]
+    public IsAllowedResponse GetAllowanceFor(string employeeId, RoomType roomType)
+    {
+        return new IsAllowedResponse(_checkIsAllowedUseCase.execute(employeeId, roomType));
+    }
 }
+
+public record IsAllowedResponse(bool isAllowed);
 
 public record EmployeePolicyBody(string employeeId, RoomType[] roomTypes);
 public record CompanyPolicyBody(string companyId, RoomType[] roomTypes);

@@ -6,4 +6,6 @@ public interface PoliciesRepository
 {
     void setCompanyPolicy(string companyId, RoomType[] roomTypes);
     void setEmployeePolicy(string employeeId, RoomType[] roomTypes);
+    RoomType[] retrieveEmployeePolicies(string employeeId);
+    RoomType[] retrieveCompanyPolicies(string companyId);
 }

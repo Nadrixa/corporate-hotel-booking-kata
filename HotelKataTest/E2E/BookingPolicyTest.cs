@@ -133,4 +133,16 @@ public class BookingPolicyTest
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
     }
+    
+    [Fact]
+    public async void ShouldReturnThatBookingIsAllowedForGivenEmployeeAndRoomType()
+    {
+        var testServer = new WebApplicationFactory<Program>();
+        var client = testServer.CreateClient();
+        var response = await client.GetFromJsonAsync<IsAllowedResponseBody>("policies/isAllowed/pepito/rooms/standard");
+        
+        Assert.True(response.isAllowed);
+    }
+
+    public record IsAllowedResponseBody(bool isAllowed);
 }

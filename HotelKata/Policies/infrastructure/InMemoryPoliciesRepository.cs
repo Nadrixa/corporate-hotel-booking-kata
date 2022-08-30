@@ -23,4 +23,14 @@ public class InMemoryPoliciesRepository : PoliciesRepository
     {
         PoliciesByEmployee[employeeId] = roomTypes;
     }
+
+    public RoomType[] retrieveEmployeePolicies(string employeeId)
+    {
+        return !PoliciesByEmployee.ContainsKey(employeeId) ? new RoomType[] {} : PoliciesByEmployee[employeeId];
+    }
+
+    public RoomType[] retrieveCompanyPolicies(string companyId)
+    {
+        return !PoliciesByCompany.ContainsKey(companyId) ? new RoomType[] {} : PoliciesByCompany[companyId];
+    }
 }
