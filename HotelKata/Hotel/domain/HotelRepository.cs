@@ -4,6 +4,17 @@ namespace HotelKata.Hotel.domain;
 
 public interface HotelRepository
 {
-    FindHotelUseCase.HotelDetails find(string id);
-    void add(string id, string name);
+    FindHotelUseCase.HotelDetails findHotelWith(string id);
+    void addHotelWith(string id, string name);
+    void addRoomsToHotel(string hotelId, RoomType type, int number);
+}
+
+public class ExistingHotelException : Exception
+{
+    
+}
+
+public class NotExistingHotelException : Exception
+{
+    
 }

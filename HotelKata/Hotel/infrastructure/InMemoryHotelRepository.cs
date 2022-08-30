@@ -12,13 +12,23 @@ public class InMemoryHotelRepository : HotelRepository
         _hotels = new Dictionary<string, FindHotelUseCase.HotelDetails>();
     }
 
-    public FindHotelUseCase.HotelDetails find(string id)
+    public FindHotelUseCase.HotelDetails findHotelWith(string id)
     {
         return _hotels[id];
     }
 
-    public void add(string id, string name)
+    public void addHotelWith(string id, string name)
     {
         _hotels.Add(id, new FindHotelUseCase.HotelDetails(name, new Dictionary<RoomType, int>()));
+    }
+
+    public void addRoomsToHotel(string hotelId, RoomType type, int number)
+    {
+        if (!_hotels.ContainsKey(hotelId))
+        {
+            throw new NotExistingHotelException();
+        }
+
+        _hotels[hotelId].Rooms[type] = number;
     }
 }

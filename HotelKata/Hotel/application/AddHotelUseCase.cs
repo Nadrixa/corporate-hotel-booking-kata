@@ -1,4 +1,3 @@
-using HotelKata.Hotel.api;
 using HotelKata.Hotel.domain;
 
 namespace HotelKata.Hotel.application;
@@ -12,8 +11,8 @@ public class AddHotelUseCase
         _hotelsRepository = hotelsRepository;
     }
 
-    public void execute(CorporateHotel.HotelCreationBody hotelData)
+    public void execute(string hotelId, string hotelName)
     {
-        _hotelsRepository.add(hotelData.hotelId, hotelData.hotelName);
+        _hotelsRepository.addHotelWith(hotelId, hotelName);
     }
 }

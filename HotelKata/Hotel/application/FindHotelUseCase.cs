@@ -13,7 +13,7 @@ public class FindHotelUseCase
 
     public HotelDetails execute(string id)
     {
-        return _hotelRepository.find(id);
+        return _hotelRepository.findHotelWith(id);
     }
     
     public record HotelDetails(string Name, Dictionary<RoomType, int> Rooms);

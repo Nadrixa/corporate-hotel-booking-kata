@@ -1,9 +1,8 @@
-using HotelKata.Hotel.api;
 using HotelKata.Hotel.application;
 using HotelKata.Hotel.domain;
 using Moq;
 
-namespace HotelKataTest.unit;
+namespace HotelKataTest.unit.hotel;
 
 public class AddHotelUseCaseTest
 {
@@ -14,19 +13,19 @@ public class AddHotelUseCaseTest
         var hotelsRepository = new Mock<HotelRepository>();
         var addHotelUseCase = new AddHotelUseCase(hotelsRepository.Object);
         
-        addHotelUseCase.execute(new CorporateHotel.HotelCreationBody("1", "Palace"));
+        addHotelUseCase.execute("1", "Palace");
         
-        hotelsRepository.Verify(hotelsRepository => hotelsRepository.add("1", "Palace"), Times.Once);
+        hotelsRepository.Verify(hotelsRepository => hotelsRepository.addHotelWith("1", "Palace"), Times.Once);
     }
     
     [Fact]
     public void ShouldThrowIfHotelPreviouslyExistsWhenAdding()
     {
         var hotelsRepository = new Mock<HotelRepository>();
-        hotelsRepository.Setup(hotelsRepository => hotelsRepository.add("1", "Palace"))
+        hotelsRepository.Setup(hotelsRepository => hotelsRepository.addHotelWith("1", "Palace"))
             .Throws(new ExistingHotelException());
         var addHotelUseCase = new AddHotelUseCase(hotelsRepository.Object);
         
-        Assert.Throws<ExistingHotelException>(() => addHotelUseCase.execute(new CorporateHotel.HotelCreationBody("1", "Palace")));
+        Assert.Throws<ExistingHotelException>(() => addHotelUseCase.execute("1", "Palace"));
     }
 }
