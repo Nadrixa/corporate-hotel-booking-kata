@@ -8,66 +8,61 @@ namespace HotelKataTest.E2E;
 
 public class EmployeesTest
 {
-        
+    private readonly HttpClient _client;
+    private readonly WebApplicationFactory<Program> _testServer;
+
+    public EmployeesTest()
+    {
+        _testServer = new WebApplicationFactory<Program>();
+        _client = _testServer.CreateClient();
+    }
+
     [Fact]
     public async void ShouldBeAbleToAddEmployee()
     {
-        var testServer = new WebApplicationFactory<Program>();
-        var client = testServer.CreateClient();
-        
-        var response = await client.PostAsJsonAsync(
+        const string employeeId = "pepito";
+        const string companyId = "codurance";
+        var response = await _client.PostAsJsonAsync(
             "employees",
             new {
-                employeeId = "pepito",
-                companyId = "codurance"
+                employeeId, companyId
             });
 
-        thenAddEmployeeRepliedWith201();
+        NetworkAssertions.ThenRepliedWithExpectedStatus(HttpStatusCode.Created, response.StatusCode);
         thenEmployeeHasBeenSaved();
 
         void thenEmployeeHasBeenSaved()
         {
-            var employeesRepository = testServer.Services.GetService<InMemoryEmployeesRepository>();
-            Assert.Equal("codurance", employeesRepository.Employees["pepito"]);
-        }
-
-        void thenAddEmployeeRepliedWith201()
-        {
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+            var employeesRepository = _testServer.Services.GetService<InMemoryEmployeesRepository>();
+            Assert.Equal(companyId, employeesRepository.Employees[employeeId]);
         }
     }
-    
+
     [Fact]
     public async void ShouldReplyWithBadRequestWhenTryingToAddAnExistingEmployee()
     {
-        var testServer = new WebApplicationFactory<Program>();
-        var client = testServer.CreateClient();
-        await client.PostAsJsonAsync(
+        const string employeeId = "pepito";
+        const string companyId = "codurance";
+        await _client.PostAsJsonAsync(
             "employees",
             new {
-                employeeId = "pepito",
-                companyId = "codurance"
+                employeeId, companyId
             });
         
-        var response = await client.PostAsJsonAsync(
+        var response = await _client.PostAsJsonAsync(
             "employees",
             new {
-                employeeId = "pepito",
+                employeeId,
                 companyId = "coduranco"
             });
 
-        thenAddEmployeeRepliedWith400();
+        NetworkAssertions.ThenRepliedWithExpectedStatus(HttpStatusCode.BadRequest, response.StatusCode);
         thenEmployeeShouldNotBeUpdated();
 
         void thenEmployeeShouldNotBeUpdated()
         {
-            var employeesRepository = testServer.Services.GetService<InMemoryEmployeesRepository>();
-            Assert.Equal("codurance", employeesRepository.Employees["pepito"]);
-        }
-
-        void thenAddEmployeeRepliedWith400()
-        {
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var employeesRepository = _testServer.Services.GetService<InMemoryEmployeesRepository>();
+            Assert.Equal(companyId, employeesRepository.Employees[employeeId]);
         }
     }
 }

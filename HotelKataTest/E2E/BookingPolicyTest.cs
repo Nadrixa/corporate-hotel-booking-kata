@@ -9,139 +9,106 @@ namespace HotelKataTest.E2E;
 
 public class BookingPolicyTest
 {
+    private readonly WebApplicationFactory<Program> _testServer;
+    private readonly HttpClient _client;
+    
+    public BookingPolicyTest()
+    {
+        _testServer = new WebApplicationFactory<Program>();
+        _client = _testServer.CreateClient();
+    }
 
     [Fact]
     public async void ShouldBeAbleToAddCompanyPolicy()
     {
-        var testServer = new WebApplicationFactory<Program>();
-        var client = testServer.CreateClient();
-        
-        var response = await client.PostAsJsonAsync(
+        var companyId = "codurance";
+        var roomTypes = new[] { RoomType.Standard, RoomType.Junior };
+        var response = await _client.PostAsJsonAsync(
             "policies/company",
-            new {
-                companyId = "codurance",
-                roomTypes = new[] { RoomType.Standard, RoomType.Junior }
-            });
+            new { companyId, roomTypes });
 
-        thenRepliedWith201();
-        thenCompanyPolicyHasBeenCreated();
-
-        void thenCompanyPolicyHasBeenCreated()
-        {
-            var policiesRepository = testServer.Services.GetService<InMemoryPoliciesRepository>();
-            Assert.Equal(new[] { RoomType.Standard, RoomType.Junior}, policiesRepository.PoliciesByCompany["codurance"]);
-        }
-
-        void thenRepliedWith201()
-        {
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        }
+        NetworkAssertions.ThenRepliedWithExpectedStatus(HttpStatusCode.Created, response.StatusCode);
+        ThenCompanyPolicyHasExpectedValues(companyId, roomTypes);
     }
     
     [Fact]
     public async void ShouldBeAbleToUpdateCompanyPolicy()
     {
-        var testServer = new WebApplicationFactory<Program>();
-        var client = testServer.CreateClient(); 
-        await client.PostAsJsonAsync(
+        const string companyId = "codurance";
+        await _client.PostAsJsonAsync(
             "policies/company",
             new {
-                companyId = "codurance",
+                companyId,
                 roomTypes = new[] { RoomType.Standard, RoomType.Junior }
             });
 
-        var response = await client.PostAsJsonAsync(
+        var roomTypes = new[] { RoomType.Premium };
+        var response = await _client.PostAsJsonAsync(
             "policies/company",
             new {
-                companyId = "codurance",
-                roomTypes = new[] { RoomType.Premium }
+                companyId, roomTypes
             });
-        
-        thenRepliedWith201();
-        thenCompanyPolicyHasBeenUpdated();
 
-        void thenCompanyPolicyHasBeenUpdated()
-        {
-            var policiesRepository = testServer.Services.GetService<InMemoryPoliciesRepository>();
-            Assert.Equal(new[] { RoomType.Premium }, policiesRepository.PoliciesByCompany["codurance"]);
-        }
-
-        void thenRepliedWith201()
-        {
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        }
+        NetworkAssertions.ThenRepliedWithExpectedStatus(HttpStatusCode.Created, response.StatusCode);
+        ThenCompanyPolicyHasExpectedValues(companyId, roomTypes);
     }
+    
     
     [Fact]
     public async void ShouldBeAbleToAddEmployeePolicy()
     {
-        var testServer = new WebApplicationFactory<Program>();
-        var client = testServer.CreateClient();
-        
-        var response = await client.PostAsJsonAsync(
+        const string employeeId = "pepito";
+        var roomTypes = new[] { RoomType.Standard, RoomType.Junior };
+        var response = await _client.PostAsJsonAsync(
             "policies/employee",
             new {
-                employeeId = "pepito",
-                roomTypes = new[] { RoomType.Standard, RoomType.Junior }
+                employeeId, roomTypes
             });
 
-        thenRepliedWith201();
-        thenEmployeePolicyHasBeenCreated();
-
-        void thenEmployeePolicyHasBeenCreated()
-        {
-            var policiesRepository = testServer.Services.GetService<InMemoryPoliciesRepository>();
-            Assert.Equal(new[] { RoomType.Standard, RoomType.Junior}, policiesRepository.PoliciesByEmployee["pepito"]);
-        }
-
-        void thenRepliedWith201()
-        {
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        }
+        NetworkAssertions.ThenRepliedWithExpectedStatus(HttpStatusCode.Created, response.StatusCode);
+        ThenEmployeePolicyHasExpectedValues(employeeId, roomTypes);
     }
     
     [Fact]
     public async void ShouldBeAbleToUpdateEmployeePolicy()
     {
-        var testServer = new WebApplicationFactory<Program>();
-        var client = testServer.CreateClient();
-        await client.PostAsJsonAsync(
+        const string employeeId = "pepito";
+        await _client.PostAsJsonAsync(
             "policies/employee",
             new {
-                employeeId = "pepito",
+                employeeId,
                 roomTypes = new[] { RoomType.Standard, RoomType.Junior }
             });
-        
-        var response = await client.PostAsJsonAsync(
+
+        var roomTypes = new[] { RoomType.Premium };
+        var response = await _client.PostAsJsonAsync(
             "policies/employee",
             new {
-                employeeId = "pepito",
-                roomTypes = new[] { RoomType.Premium }
+                employeeId, roomTypes
             });
 
-        thenRepliedWith201();
-        thenEmployeePolicyHasBeenUpdated();
-
-        void thenEmployeePolicyHasBeenUpdated()
-        {
-            var policiesRepository = testServer.Services.GetService<InMemoryPoliciesRepository>();
-            Assert.Equal(new[] { RoomType.Premium }, policiesRepository.PoliciesByEmployee["pepito"]);
-        }
-
-        void thenRepliedWith201()
-        {
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        }
+        NetworkAssertions.ThenRepliedWithExpectedStatus(HttpStatusCode.Created, response.StatusCode);
+        ThenEmployeePolicyHasExpectedValues(employeeId, roomTypes);
     }
     
     [Fact]
     public async void ShouldReturnThatBookingIsAllowedForGivenEmployeeAndRoomType()
     {
-        var testServer = new WebApplicationFactory<Program>();
-        var client = testServer.CreateClient();
-        var response = await client.GetFromJsonAsync<IsAllowedResponseBody>("policies/isAllowed/pepito/rooms/standard");
+        var response = await _client.GetFromJsonAsync<BookingPolicyTest.IsAllowedResponseBody>("policies/isAllowed/pepito/rooms/standard");
         
         Assert.True(response.isAllowed);
+    }
+
+    private void ThenCompanyPolicyHasExpectedValues(string companyId, RoomType[] expectedRoomTypes)
+    {
+        var policiesRepository = _testServer.Services.GetService<InMemoryPoliciesRepository>();
+        Assert.Equal(expectedRoomTypes, policiesRepository.PoliciesByCompany[companyId]);
+    }
+
+    private void ThenEmployeePolicyHasExpectedValues(string employeeId, RoomType[] expectedRoomTypes)
+    {
+        var policiesRepository = _testServer.Services.GetService<InMemoryPoliciesRepository>();
+        Assert.Equal(expectedRoomTypes, policiesRepository.PoliciesByEmployee[employeeId]);
     }
 
     public record IsAllowedResponseBody(bool isAllowed);

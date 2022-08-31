@@ -29,13 +29,8 @@ public class CorporateHotelTest
         var response = await _client.PostAsJsonAsync("hotels", hotelInformation);
         var (name, rooms) = (await _client.GetFromJsonAsync<FindHotelUseCase.HotelDetails>("hotels/1"))!;
         
-        thenHotelCreationRepliedWith201();
+        NetworkAssertions.ThenRepliedWithExpectedStatus(HttpStatusCode.Created, response.StatusCode);
         thenHotelInformationIsTheExpected();
-
-        void thenHotelCreationRepliedWith201()
-        {
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        }
 
         void thenHotelInformationIsTheExpected()
         {
@@ -58,19 +53,15 @@ public class CorporateHotelTest
                 hotelId = "1",
                 hotelName = "Palace"
             });
+        
         var response = await _client.PostAsJsonAsync("hotels/1/rooms", new
         {
             type = RoomType.Standard,
             number = 5
         });
 
-        thenHotelUpdateRepliedWith200();
+        NetworkAssertions.ThenRepliedWithExpectedStatus(HttpStatusCode.OK, response.StatusCode);
         await thenHotelInformationIsTheExpected();
-
-        void thenHotelUpdateRepliedWith200()
-        {
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        }
 
         async Task thenHotelInformationIsTheExpected()
         {
