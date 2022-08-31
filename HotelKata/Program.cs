@@ -1,7 +1,6 @@
 using HotelKata.Bookings.infrastructure;
 using HotelKata.Employees.infrastructure;
 using HotelKata.Hotel.infrastructure;
-using HotelKata.Policies.application;
 using HotelKata.Policies.infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
