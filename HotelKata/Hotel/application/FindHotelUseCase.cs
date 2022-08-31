@@ -16,5 +16,16 @@ public class FindHotelUseCase
         return _hotelRepository.findHotelWith(id);
     }
     
-    public record HotelDetails(string Name, Dictionary<RoomType, int> Rooms);
+    public record HotelDetails(string Name, Dictionary<RoomType, int> Rooms)
+    {
+        public bool hasRoom(RoomType roomType)
+        {
+            return Rooms.ContainsKey(roomType);
+        }
+
+        public int GetNumberOfRoomsOf(RoomType roomType)
+        {
+            return Rooms[roomType];
+        }
+    }
 }

@@ -1,5 +1,7 @@
+using HotelKata.Bookings.infrastructure;
 using HotelKata.Employees.infrastructure;
 using HotelKata.Hotel.infrastructure;
+using HotelKata.Policies.application;
 using HotelKata.Policies.infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +11,7 @@ builder.Logging.AddConsole();
 builder.Services.AddSingleton<InMemoryHotelRepository>();
 builder.Services.AddSingleton<InMemoryEmployeesRepository>();
 builder.Services.AddSingleton<InMemoryPoliciesRepository>();
+builder.Services.AddSingleton<InMemoryBookingsRepository>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

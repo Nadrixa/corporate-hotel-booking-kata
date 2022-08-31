@@ -15,7 +15,7 @@ public class CheckIsAllowedUseCase
         _employeesRepository = employeesRepository;
     }
 
-    public bool execute(string employeeId, RoomType roomType)
+    public virtual bool execute(string employeeId, RoomType roomType)
     {
         var employeePolicies = _policiesRepository.retrieveEmployeePolicies(employeeId);
         if (employeePolicies.Length != 0)
