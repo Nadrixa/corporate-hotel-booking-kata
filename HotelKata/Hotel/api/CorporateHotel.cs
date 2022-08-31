@@ -30,8 +30,16 @@ public class CorporateHotel : ControllerBase
     [HttpPost("{hotelId}/rooms")]
     public IActionResult AddRoomsToHotel(String hotelId, RoomData roomData)
     {
-        _addRoomToHotelUseCase.execute(hotelId, roomData);
-        return StatusCode(200);
+        try
+        {
+            _addRoomToHotelUseCase.execute(hotelId, roomData);
+            return StatusCode(200);
+        }
+        catch (NotExistingHotelException)
+        {
+            return StatusCode(404);
+        }
+
     }
     
     [HttpGet("{hotelId}")]

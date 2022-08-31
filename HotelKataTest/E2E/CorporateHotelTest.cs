@@ -45,6 +45,18 @@ public class CorporateHotelTest
     }
     
     [Fact]
+    public async void ShouldReplyWithNotFoundWhenTryingToAddARoomToHotelThatDoesNotExist()
+    {
+        var response = await _client.PostAsJsonAsync("hotels/1/rooms", new
+        {
+            type = RoomType.Standard,
+            number = 5
+        });
+
+        NetworkAssertions.ThenRepliedWithExpectedStatus(HttpStatusCode.NotFound, response.StatusCode);
+    }
+    
+    [Fact]
     public async void ShouldBeAbleToAddRoomsToExistingHotel()
     {
         await _client.PostAsJsonAsync(
