@@ -8,4 +8,5 @@ public interface PoliciesRepository
     void setEmployeePolicy(string employeeId, RoomType[] roomTypes);
     RoomType[] retrieveEmployeePolicies(string employeeId);
     RoomType[] retrieveCompanyPolicies(string companyId);
+    void deleteEmployeePoliciesOf(string employeeId);
 }

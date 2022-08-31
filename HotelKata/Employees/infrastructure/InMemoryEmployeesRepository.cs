@@ -24,4 +24,13 @@ public class InMemoryEmployeesRepository : EmployeesRepository
     {
         return !Employees.ContainsKey(employeeId) ? "" : Employees[employeeId];
     }
+
+    public void delete(string employeeId)
+    {
+        if (!Employees.ContainsKey(employeeId))
+        {
+            throw new NotExistingEmployeeException();
+        }
+        Employees.Remove(employeeId);
+    }
 }

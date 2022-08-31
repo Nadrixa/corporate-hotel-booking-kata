@@ -37,4 +37,9 @@ public class InMemoryBookingsRepository : BookingRepository
     {
         Bookings.Add(booking);
     }
+
+    public void deleteBookingsOf(string employeeId)
+    {
+        Bookings.RemoveAll(booking => booking.employeeId == employeeId);
+    }
 }

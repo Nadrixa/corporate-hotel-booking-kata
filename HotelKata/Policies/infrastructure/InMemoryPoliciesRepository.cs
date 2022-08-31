@@ -33,4 +33,9 @@ public class InMemoryPoliciesRepository : PoliciesRepository
     {
         return !PoliciesByCompany.ContainsKey(companyId) ? new RoomType[] {} : PoliciesByCompany[companyId];
     }
+
+    public void deleteEmployeePoliciesOf(string employeeId)
+    {
+        PoliciesByEmployee.Remove(employeeId);
+    }
 }

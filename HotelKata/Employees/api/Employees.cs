@@ -1,6 +1,8 @@
+using HotelKata.Bookings.infrastructure;
 using HotelKata.Employees.application;
 using HotelKata.Employees.domain;
 using HotelKata.Employees.infrastructure;
+using HotelKata.Policies.infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelKata.Employees.api;
@@ -10,9 +12,12 @@ namespace HotelKata.Employees.api;
 public class Employees : ControllerBase
 {
     private readonly AddEmployeeUseCase _addEmployeeUseCase;
+    private readonly DeleteEmployeeUseCase _deleteEmployeeUseCase;
 
-    public Employees(InMemoryEmployeesRepository inMemoryEmployeesRepository)
+    public Employees(InMemoryEmployeesRepository inMemoryEmployeesRepository,
+        InMemoryPoliciesRepository inMemoryPoliciesRepository, InMemoryBookingsRepository inMemoryBookingsRepository)
     {
+        _deleteEmployeeUseCase = new DeleteEmployeeUseCase(inMemoryEmployeesRepository, inMemoryPoliciesRepository, inMemoryBookingsRepository);
         _addEmployeeUseCase = new AddEmployeeUseCase(inMemoryEmployeesRepository);
     }
 
@@ -28,6 +33,21 @@ public class Employees : ControllerBase
         {
             return StatusCode(400);
         }
+    }
+    
+    [HttpDelete("{employeeId}")]
+    public IActionResult AddEmployee(string employeeId)
+    {
+        try
+        {
+            _deleteEmployeeUseCase.execute(employeeId);
+            return StatusCode(200);
+        }
+        catch (NotExistingEmployeeException)
+        {
+            return StatusCode(404);
+        }
+
     }
 
     public record AddEmployeeBody(string employeeId, string companyId);
