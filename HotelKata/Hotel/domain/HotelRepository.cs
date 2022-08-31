@@ -8,13 +8,3 @@ public interface HotelRepository
     void addHotelWith(string id, string name);
     void addRoomsToHotel(string hotelId, RoomType type, int number);
 }
-
-public class ExistingHotelException : Exception
-{
-    
-}
-
-public class NotExistingHotelException : Exception
-{
-    
-}

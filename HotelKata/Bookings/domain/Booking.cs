@@ -13,11 +13,3 @@ public record Booking(string employeeId, string hotelId, RoomType roomType, long
         }
     }
 }
-
-public class InvalidBookingException : Exception
-{
-}
-
-public class NotAvailableRoomBookingException : Exception
-{
-}
