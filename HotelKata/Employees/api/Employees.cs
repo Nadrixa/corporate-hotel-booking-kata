@@ -36,7 +36,7 @@ public class Employees : ControllerBase
     }
     
     [HttpDelete("{employeeId}")]
-    public IActionResult AddEmployee(string employeeId)
+    public IActionResult DeleteEmployee(string employeeId)
     {
         try
         {
