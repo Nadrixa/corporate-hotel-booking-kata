@@ -18,6 +18,9 @@ public class DeleteEmployeeUseCase
     }
     public void execute(string employeeId)
     {
+        if (_employeesRepository.retrieveEmployeeInformation(employeeId) is null)
+            throw new NotExistingEmployeeException();
+        
         _employeesRepository.delete(employeeId);
         _policiesRepository.deleteEmployeePoliciesOf(employeeId);
         _bookingsRepository.deleteBookingsOf(employeeId);

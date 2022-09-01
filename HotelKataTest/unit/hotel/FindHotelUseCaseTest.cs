@@ -23,10 +23,11 @@ public class FindHotelUseCaseTest
     [Fact]
     public void ShouldThrowIfDesiredHotelDoesNotExist()
     {
+        var hotelId = "1";
         var hotelRepository = new Mock<HotelRepository>();
-        hotelRepository.Setup(hotelRepository => hotelRepository.findHotelWith(It.IsAny<string>())).Throws(new NotExistingHotelException());
+        hotelRepository.Setup(repository => repository.findHotelWith(hotelId)).Returns((FindHotelUseCase.HotelDetails?) null);
         var findHotelUseCase = new FindHotelUseCase(hotelRepository.Object);
 
-        Assert.Throws<NotExistingHotelException>(() => findHotelUseCase.execute("1"));
+        Assert.Throws<NotExistingHotelException>(() => findHotelUseCase.execute(hotelId));
     }
 }

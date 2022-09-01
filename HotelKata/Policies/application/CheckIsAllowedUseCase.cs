@@ -23,7 +23,7 @@ public class CheckIsAllowedUseCase
             return employeePolicies.Contains(roomType);
         }
         
-        var companyPolicies = _policiesRepository.retrieveCompanyPolicies(_employeesRepository.retrieveEmployeeInformation(employeeId));
+        var companyPolicies = _policiesRepository.retrieveCompanyPolicies(_employeesRepository.retrieveEmployeeInformation(employeeId) ?? "");
         if (companyPolicies.Length != 0)
         {
             return companyPolicies.Contains(roomType);

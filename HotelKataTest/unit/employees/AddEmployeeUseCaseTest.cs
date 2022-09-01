@@ -23,11 +23,12 @@ public class AddEmployeeUseCaseTest
     [Fact]
     public void ShouldThrowIfEmployeeExistWhenTryingToAddHerAgain()
     {
+        var employeeId = "pepito";
         var employeesRepository = new Mock<EmployeesRepository>();
-        employeesRepository.Setup(repository => repository.Add(It.IsAny<string>(), It.IsAny<string>()))
-            .Throws(new ExistingEmployeeException());
+        employeesRepository.Setup(repository => repository.retrieveEmployeeInformation(employeeId))
+            .Returns("codurance");
         var addEmployeeUseCase = new AddEmployeeUseCase(employeesRepository.Object);
         
-        Assert.Throws<ExistingEmployeeException>(() => addEmployeeUseCase.execute("codurance", "pepito"));
+        Assert.Throws<ExistingEmployeeException>(() => addEmployeeUseCase.execute("coduranco", employeeId));
     }
 }

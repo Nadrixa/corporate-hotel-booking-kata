@@ -47,7 +47,7 @@ public class AddBookingUseCaseTest
         {
             var hotelRepository = new Mock<HotelRepository>();
             hotelRepository.Setup(repository => repository.findHotelWith("notExistingHotel"))
-                .Throws(new NotExistingHotelException());
+                .Returns((FindHotelUseCase.HotelDetails?) null);
 
             return new AddBookingUseCase(
                 hotelRepository.Object,

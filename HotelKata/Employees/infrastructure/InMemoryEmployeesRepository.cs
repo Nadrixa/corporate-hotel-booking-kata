@@ -13,24 +13,16 @@ public class InMemoryEmployeesRepository : EmployeesRepository
 
     public void Add(string companyId, string employeeId)
     {
-        if (Employees.ContainsKey(employeeId))
-        {
-            throw new ExistingEmployeeException();
-        }
         Employees.Add(employeeId, companyId);
     }
 
-    public string retrieveEmployeeInformation(string employeeId)
+    public string? retrieveEmployeeInformation(string employeeId)
     {
-        return !Employees.ContainsKey(employeeId) ? "" : Employees[employeeId];
+        return Employees.ContainsKey(employeeId) ? Employees[employeeId] : null;
     }
 
     public void delete(string employeeId)
     {
-        if (!Employees.ContainsKey(employeeId))
-        {
-            throw new NotExistingEmployeeException();
-        }
         Employees.Remove(employeeId);
     }
 }

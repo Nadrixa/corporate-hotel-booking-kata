@@ -13,6 +13,8 @@ public class AddEmployeeUseCase
 
     public void execute(string companyId, string employeeId)
     {
+        if (_employeesRepository.retrieveEmployeeInformation(employeeId) is not null) throw new ExistingEmployeeException();
+        
         _employeesRepository.Add(companyId, employeeId);
     }
 }

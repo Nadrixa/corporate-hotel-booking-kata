@@ -25,14 +25,14 @@ public class AddBookingUseCase
         _bookingRepository.add(booking);
 
         return booking;
-        
+
         void ValidateBooking()
         {
             booking.validateDates();
             ValidateHotelInformation();
             ValidateIfBookingIsAllowed();
             ValidateIfThereIsRoomAvailableInBookingPeriod();
-            
+
             void ValidateIfThereIsRoomAvailableInBookingPeriod()
             {
                 var bookingsThatClashes = _bookingRepository.retrieveBookingsFor(booking.hotelId, booking.roomType,
@@ -57,17 +57,10 @@ public class AddBookingUseCase
                     throw new InvalidBookingException();
                 }
             }
-            
+
             FindHotelUseCase.HotelDetails RetrieveHotelDetails()
             {
-                try
-                {
-                    return _hotelRepository.findHotelWith(booking.hotelId);
-                }
-                catch (Exception)
-                {
-                    throw new InvalidBookingException();
-                }
+                return _hotelRepository.findHotelWith(booking.hotelId) ?? throw new InvalidBookingException();
             }
         }
     }

@@ -14,6 +14,8 @@ public class AddRoomToHotelUseCase
 
     public void execute(string hotelId, CorporateHotel.RoomData roomData)
     {
+        if (_hotelRepository.findHotelWith(hotelId) is null) throw new NotExistingHotelException();
+        
         _hotelRepository.addRoomsToHotel(hotelId, roomData.type, roomData.number);
     }
 }

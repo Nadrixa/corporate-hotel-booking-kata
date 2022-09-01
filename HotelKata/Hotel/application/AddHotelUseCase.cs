@@ -13,6 +13,8 @@ public class AddHotelUseCase
 
     public void execute(string hotelId, string hotelName)
     {
+        if (_hotelsRepository.findHotelWith(hotelId) is not null) throw new ExistingHotelException();
+        
         _hotelsRepository.addHotelWith(hotelId, hotelName);
     }
 }
