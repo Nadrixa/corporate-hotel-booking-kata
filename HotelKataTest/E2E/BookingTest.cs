@@ -65,7 +65,7 @@ public class BookingTest
     }
     
     [Fact]
-    public async void ShouldReplyWithBadRequestAndNotAddBookingWhenThereIsNotRoomAvailable()
+    public async void ShouldReplyWithConclictAndNotAddBookingWhenThereIsNotRoomAvailable()
     {
         var (employeeId, hotelId, roomType, checkIn, checkOut) = GivenBookingInformation();
         await GivenHotelCreatedWithRooms();
@@ -92,7 +92,7 @@ public class BookingTest
                 checkOut
             });
         
-        NetworkAssertions.ThenRepliedWithExpectedStatus(HttpStatusCode.BadRequest, response.StatusCode);
+        NetworkAssertions.ThenRepliedWithExpectedStatus(HttpStatusCode.Conflict, response.StatusCode);
         ThenBookingShouldNotBeAdded();
 
         void ThenBookingShouldNotBeAdded()

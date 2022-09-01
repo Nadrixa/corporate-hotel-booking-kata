@@ -36,11 +36,14 @@ public class Bookings : ControllerBase
                 ));
             return StatusCode(201);
         }
-        catch (Exception ex) when (ex is InvalidBookingException or NotAvailableRoomBookingException)
+        catch (InvalidBookingException)
         {
             return StatusCode(400);
         }
-
+        catch (NotAvailableRoomBookingException)
+        {
+            return StatusCode(409);
+        }
     }
 
     public record BookingBody(string employeeId, string hotelId, RoomType roomType, long checkIn, long checkOut);

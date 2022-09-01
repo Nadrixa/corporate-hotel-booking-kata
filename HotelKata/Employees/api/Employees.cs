@@ -31,7 +31,7 @@ public class Employees : ControllerBase
         }
         catch (ExistingEmployeeException)
         {
-            return StatusCode(400);
+            return StatusCode(409);
         }
     }
     

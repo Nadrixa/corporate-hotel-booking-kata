@@ -43,7 +43,7 @@ public class EmployeesTest
     }
     
     [Fact]
-    public async void ShouldReplyWithBadRequestWhenTryingToAddAnExistingEmployee()
+    public async void ShouldReplyWithConflictWhenTryingToAddAnExistingEmployee()
     {
         const string employeeId = "pepito";
         const string companyId = "codurance";
@@ -56,7 +56,7 @@ public class EmployeesTest
                 companyId = "coduranco"
             });
 
-        NetworkAssertions.ThenRepliedWithExpectedStatus(HttpStatusCode.BadRequest, response.StatusCode);
+        NetworkAssertions.ThenRepliedWithExpectedStatus(HttpStatusCode.Conflict, response.StatusCode);
         thenEmployeeShouldNotBeUpdated();
 
         void thenEmployeeShouldNotBeUpdated()
