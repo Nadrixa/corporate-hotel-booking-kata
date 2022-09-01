@@ -38,7 +38,7 @@ public class AddBookingUseCase
                 var bookingsThatClashes = _bookingRepository.retrieveBookingsFor(booking.hotelId, booking.roomType,
                     booking.checkIn,
                     booking.checkOut);
-                var hotelDetails = RetrieveHotelDetails(); // TODO: Maybe do it only once?
+                var hotelDetails = RetrieveHotelDetails();
                 if (hotelDetails.GetNumberOfRoomsOf(booking.roomType) > bookingsThatClashes.Count) return;
                 throw new NotAvailableRoomBookingException();
             }
